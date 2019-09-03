@@ -37,6 +37,10 @@ import loginForm from '@/components/user/loginForm.vue'
          this.currentTab = index
       }
     },
+    mounted() {
+      // console.log(this.$store.state);
+      console.log(this.$store.state.user.userInfo);
+    },
   }
 </script>
 
