@@ -76,7 +76,32 @@ export default {
   },
   methods: {
     // 获取验证码
-    handleSendCaptcha() {},
+    handleSendCaptcha() {
+        if(this.form.username.length !== 11){
+            this.$alert('手机号码格式错误', '提示', {
+            confirmButtonText: '确定',
+            showCancelButton: false,
+            type: 'warning'
+        });
+        return;
+        }
+        this.$axios({
+            url:'/captchas',
+            method:'post',
+            data:{
+                tel:this.form.username
+            }
+        })
+        .then((result) => {
+            console.log(result)
+            const {code} = result.data
+            this.$alert(`模拟手机验证码为：${code}`, '提示', {
+            confirmButtonText: '确定',
+            showCancelButton: false,
+            type: 'success'
+        });
+        })
+    },
     // 注册提交
     handleRegSubmit() {}
   }
