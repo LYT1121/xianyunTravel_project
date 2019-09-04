@@ -52,9 +52,16 @@ export default {
           }); */
           // 调用store里请求的数据
           // Action 通过 store.dispatch 方法触发=>可以处理被触发的 action 的处理函数返回的 Promise，并且 store.dispatch 仍旧返回 Promise
+          /* 
+          仓库store那边没有执行异步actions=>可以这样获取仓库数据
+          设置用户信息mutation下的setUserInfo的方法 commit
+          commit接受两个参数，第一个mutations参数是方法名，第二个参数数据
+          this.$store.commit("user/setUserInfo", res.data)
+          */
           this.$store
             .dispatch("user/login", this.form)
             .then(result => {
+              console.log(result);
               // 成功提示
               this.$message({
                 message: "登录成功，正在跳转",

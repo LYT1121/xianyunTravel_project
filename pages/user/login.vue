@@ -39,7 +39,7 @@ import loginForm from '@/components/user/loginForm.vue'
     },
     mounted() {
       // console.log(this.$store.state);
-      console.log(this.$store.state.user.userInfo);
+      // console.log(this.$store.state.user.userInfo);
     },
   }
 </script>

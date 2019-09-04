@@ -15,14 +15,44 @@
     </el-row>
     <!-- 登录跳转 -->
     <el-row type="flex" class="login">
-        <nuxt-link to="/user/login">登录 / 注册</nuxt-link>
+        <!-- 如果用户存在则展示用户信息，用户数据来自store -->
+        <el-dropdown v-if="$store.state.user.userInfo.token">
+            <el-row type="flex" align="middle" class="el-dropdown-link">
+                <!-- 路由跳转 -->
+                <nuxt-link to="#">
+                    <!-- 动态头像展示 登录成功打印的数据中获取-->
+                    <img :src="$axios.defaults.baseURL + $store.state.user.userInfo.user.defaultAvatar" alt="">
+                    <!-- 用户姓名展示 -->
+                    {{$store.state.user.userInfo.user.nickname}}
+                </nuxt-link>
+                <i class="el-icon-caret-bottom el-icon--right"></i>
+            </el-row>
+            <!-- 下拉列表 -->
+            <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>
+                           <nuxt-link to="#">个人中心</nuxt-link>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                            <div @click="handleLogout">退出</div> 
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+        </el-dropdown>
+        <nuxt-link to="/user/login" v-else>登录 / 注册</nuxt-link>
     </el-row>
     </el-row>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+    methods:{
+        // 用户退出
+        handleLogout(){}
+    },
+    /* mounted() {
+      console.log(this.$store.state.user.userInfo);
+    }, */
+}
 </script>
 
 <style lang="less" scoped>
@@ -68,5 +98,23 @@ export default {}
         }
     }
 }
+.el-dropdown-link{
+        margin-left: 20px;
+        &:hover{
+            img{
+                border-color: #409eff;
+            }
+        }
+        a{
+            display: block;
+        }
+        img{
+            width: 35px;
+            height: 35px;
+            vertical-align: middle;
+            border: 2px solid #fff;
+            border-radius: 50px;
+        }
+    }
 
 </style>

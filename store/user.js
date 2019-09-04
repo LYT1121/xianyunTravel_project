@@ -8,9 +8,10 @@ export const state = {
 };
 // mutations => 同步修改state数据
 export const mutations = {
-    // 保存用户信息到state  state作为第一个参数
+    // 保存用户信息到state  state作为第一个参数必须的 data是调用方法时传入的参数=>不是必须的
     // 可以向 store.commit 传入额外的参数，即 mutation 的 载荷(payload) => 比如下面data
     setUserInfo(state,data){
+        //data 后台返回的用户信息
         state.userInfo = data
     }
 };
