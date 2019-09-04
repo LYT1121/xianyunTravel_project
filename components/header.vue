@@ -33,6 +33,7 @@
                            <nuxt-link to="#">个人中心</nuxt-link>
                         </el-dropdown-item>
                         <el-dropdown-item>
+                            <!-- 或者不用div 直接加点击事件@click.native="handleLogout" 给第三方组件添加事件时需要添加native-->
                             <div @click="handleLogout">退出</div> 
                         </el-dropdown-item>
                     </el-dropdown-menu>
@@ -47,7 +48,14 @@
 export default {
     methods:{
         // 用户退出
-        handleLogout(){}
+        handleLogout(){
+            // 清除登录信息
+            this.$store.commit("user/clearUserInfo");
+            this.$message({
+                message: "退出成功",
+                type: "success"
+            })
+        }
     },
     /* mounted() {
       console.log(this.$store.state.user.userInfo);

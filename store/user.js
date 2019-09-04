@@ -13,6 +13,16 @@ export const mutations = {
     setUserInfo(state,data){
         //data 后台返回的用户信息
         state.userInfo = data
+    },
+
+    // 清空用户信息
+    clearUserInfo(state){
+        // 清除本地存储原生的方法=>localStorage.removeItem('userInfo');
+        // 引用插件的方法=>直接重新赋值
+        state.userInfo={
+            key:'',
+            user:{}
+        }
     }
 };
 // actions => 异步修改state数据
