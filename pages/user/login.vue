@@ -13,7 +13,7 @@
                <!-- 登录功能组件 导入组件-->
                <loginForm v-if="currentTab === 0"></loginForm>
                <!-- 注册功能组件 -->
-
+               <registerForm v-if="currentTab === 1"></registerForm>
            </div>
        </el-row>
   </div>
@@ -21,6 +21,7 @@
 
 <script>
 import loginForm from '@/components/user/loginForm.vue'
+import registerForm from '@/components/user/registerForm.vue'
   export default {
     data(){
       return{
@@ -31,6 +32,7 @@ import loginForm from '@/components/user/loginForm.vue'
     // 注册登录页面组件和注册页面组件
     components:{
       loginForm,
+      registerForm
     },
     methods: {
       loginClick(index){
