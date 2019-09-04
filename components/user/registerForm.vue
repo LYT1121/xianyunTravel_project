@@ -15,10 +15,10 @@
         <el-input placeholder="您的名字" v-model="form.nickname"></el-input>
       </el-form-item>
       <el-form-item class="form-item" prop="password">
-        <el-input placeholder="请输入密码" v-model="form.password"></el-input>
+        <el-input placeholder="请输入密码" v-model="form.password" type="password"></el-input>
       </el-form-item>
       <el-form-item class="form-item" prop="checkPassword">
-        <el-input placeholder="请再次确认密码" v-model="form.checkPassword"></el-input>
+        <el-input placeholder="请再次确认密码" v-model="form.checkPassword" type="password"></el-input>
       </el-form-item>
       <!-- 注册按钮 -->
       <el-button type="primary" class="submit" @click="handleRegSubmit">注册</el-button>
@@ -103,24 +103,51 @@ export default {
         })
     },
     // 注册提交
-    handleRegSubmit() {}
+    handleRegSubmit() {
+        // 二次验证
+        this.$refs.form.validate(valid=>{
+            if(valid){
+                // 注册提交=>确认密码是不需要传值的，所有把其提出来
+                const { checkPassword, ...newForm} = this.form
+                this.$axios({
+                    url:'/accounts/register',
+                    method:'post',
+                    data:newForm
+                })
+                .then((result)=>{
+                console.log(result)
+                // 成功提示
+                this.$message({
+                  message: "注册成功，正在跳转",
+                  type: "success"
+                });
+                // 把token值储存到本地
+                this.$store.commit("user/setUserInfo", result.data)
+                // 跳转到首页
+                setTimeout(() => {
+                      this.$router.push("/")
+                }, 1000);
+              })
+            }
+        })
+    }
   }
 };
 </script>
 
 <style lang="less" scoped>
-.form{
-    padding: 25px;
-    font-size: 12px;
-    color: #409eff;
-    text-align: right;
-    line-height: 1;
+.form {
+  padding: 25px;
+  font-size: 12px;
+  color: #409eff;
+  text-align: right;
+  line-height: 1;
 }
-.form-item{
-    margin-bottom: 20px;
+.form-item {
+  margin-bottom: 20px;
 }
-.submit{
-        width:100%;
-        margin-top:10px;
-    }
+.submit {
+  width: 100%;
+  margin-top: 10px;
+}
 </style>
