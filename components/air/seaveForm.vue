@@ -22,6 +22,7 @@
           :fetch-suggestions="queryDepartSearch"
           placeholder="请搜索出发城市"
           @select="handleDepartSelect"
+          @blur="handleDepartBlur"
           v-model="form.departCity"
         ></el-autocomplete>
       </el-form-item>
@@ -30,6 +31,7 @@
           :fetch-suggestions="queryDestSearch"
           placeholder="请搜索到达城市"
           @select="handleDespSelect"
+          @blur="handleDestBlur"
           v-model="form.destCity"></el-autocomplete>
       </el-form-item>
       <el-form-item label="出发时间">
@@ -76,7 +78,9 @@ export default {
         destCity: "",   // 到达城市
         destCode: "",   // 到达城市代码
         departDate: ""  // 出发时间
-      }
+      },
+      departData: [], // 存储后台返回的出发城市数组
+      destData: []    // 存储后台返回的到达城市数组
     };
   },
   methods: {
@@ -109,7 +113,8 @@ export default {
                 // 输入框的关键字
                 name: value
             }
-            .then((result) => {
+        })
+        .then((result) => {
                 // console.log(result);
                 // 解构数组
                 const {data} = result.data
@@ -118,17 +123,26 @@ export default {
                 // 遍历数组
                 data.forEach(e=>{
                     // 添加value属性 replace方法替换字符串中的字
-                    e.value = e.name.value('市','');
+                    e.value = e.name.replace('市','');
                     // 把带有value属性的对象添加到新数组中
                     newForm.push(e);
                 })
-                // 用户体验=>如果用户输入时不点下拉框，默认选择下拉框的第一个
-                this.form.departCity = newForm[0].value;
-                this.form.departCode = newForm[0].sort;
+                // 用户体验=>如果用户输入时不点下拉框，默认选择下拉框的第一个=>有bug，比如本来默认广州，输入广元时会自动插入广州=>广州元
+                /* this.form.departCity = newForm[0].value;
+                this.form.departCode = newForm[0].sort; */
                 // 把城市显示到下拉列表中
                 callback(newForm)
-            })
         })
+    },
+    // 失焦事件=>出发城市
+    handleDestBlur(){
+      this.form.departCity = this.departData[0]?this.departData[0].value:'';
+      this.form.departCode = this.departData[0]?this.departData[0].sort:''
+    },
+    // 失焦事件=>到达城市
+    handleDepartBlur(){
+      this.form.destCity = this.destData[0]?this.destData[0].value:'';
+      this.form.destCode = this.destData[0]?this.destData[0].sort:''
     },
     // 到达城市下拉选择时触发
     handleDespSelect(item){
@@ -149,6 +163,7 @@ export default {
           // 输入框的关键字
           name: value
         }
+      })
       .then((result)=>{
         // 结构数组
         const {data} = result.data;
@@ -157,13 +172,12 @@ export default {
         // 遍历数组
         data.forEach(e=>{
           // 添加value属性 replace方法替换字符串中的字
-          e.value = e.name.value('市','');
+          e.value = e.name.replace('市','');
           // 把带有value属性的对象添加到新数组中
           newForm.push(e)
         })
         // 把城市显示到下拉列表中
         callback(newForm)
-      })
       })
     },
     // 日期 => 需要转换用到moment
