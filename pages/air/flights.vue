@@ -13,7 +13,8 @@
 
         <!-- 航班信息 -->
         <div>
-            <flightsItem/>
+            <!-- :data="item"=>组件传值(父组件传值给子组件) -->
+            <flightsItem v-for="(item,index) in dataList" :key="index" :data="item"/>
         </div>
       </div>
 
@@ -34,6 +35,32 @@ export default {
   components: {
     flightsListHead,
     flightsItem
+  },
+  data(){
+      return{
+          // 航班总数据
+          flightsData:{},
+          // 航班列表数据=>用于后面循环flightsItem组件=>单独出来方便处理分页
+          dataList:[]
+      }
+  },
+  methods:{
+    // 封装获取航班总数据
+    getDate(){
+          this.$axios({
+          url:'airs',
+          // 数据=>机票首页传递的5个参数(出发到达城市/城市代码/出发日期)
+          params:this.$route.query
+      }).then((result)=>{
+          console.log(result);
+          this.flightsData = result.data;
+          this.dataList = this.flightsData.flights
+      })
+    }
+  },
+  // 钩子函数=>调用上面事件处理封装好的航班总数据
+  mounted () {
+      this.getDate();
   }
 };
 </script>
