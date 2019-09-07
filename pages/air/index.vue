@@ -36,7 +36,21 @@
         <i>特价机票</i>
       </h2>
       <!-- 优惠机票区域 -->
-      <div class="airSale"></div>
+      <div class="airSale">
+          <el-row type="flex" justify="space-between" class="airSalePic">
+              <el-col :span="6" v-for="(item,index) in sales" :key="index">
+                <!-- 跳转路径 -->
+                <nuxt-link :to='`/air/flights?departCity=${item.departCity}&departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`'></nuxt-link>
+                <!-- 图片 -->
+                <img :src="item.cover" alt="">
+                <!-- 航班信息 -->
+                  <el-row type="flex" justify="space-between" class="layerBar">
+                    <span>{{item.departCity}}-{{item.destCity}}</span>
+                    <span>￥{{item.price}}</span>
+                  </el-row>
+              </el-col>
+          </el-row>
+      </div>
     </div>
   </div>
 </template>
@@ -46,11 +60,23 @@
 import seaveForm from '@/components/air/seaveForm'
 export default {
   data(){
-    return{}
+    return{
+      sales:[] // 特价机票的数组
+    }
   },
   // 注册组件
   components:{
     seaveForm
+  },
+  mounted(){
+    // 调用接口=>请求特价机票数据
+    this.$axios({
+      url:'/airs/sale'
+    }).then((result)=>{
+      // 特价机票列表
+      const {data} = result.data
+      this.sales = data
+    })
   }
 };
 </script>
@@ -100,6 +126,40 @@ export default {
     color: #409eff;
     span {
       font-size: 20px;
+    }
+  }
+  .airSale{
+    border: 1px #ddd solid;
+    padding: 20px;
+    margin-bottom: 50px;
+    .airSalePic{
+      > div {
+      width: 225px;
+      height: 140px;
+      position: relative;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+      }
+      .layerBar{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        height: 30px;
+        line-height: 30px;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 15px;
+        font-size: 14px;
+
+        span:last-child {
+          font-size: 18px;
+        }
+      }
+      }
     }
   }
 }

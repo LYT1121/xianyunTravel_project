@@ -130,17 +130,19 @@ export default {
                 // 用户体验=>如果用户输入时不点下拉框，默认选择下拉框的第一个=>有bug，比如本来默认广州，输入广元时会自动插入广州=>广州元
                 /* this.form.departCity = newForm[0].value;
                 this.form.departCode = newForm[0].sort; */
+                // 把转换后的数组赋值给data
+                this.departData = newForm
                 // 把城市显示到下拉列表中
                 callback(newForm)
         })
     },
     // 失焦事件=>出发城市
-    handleDestBlur(){
+    handleDepartBlur(){
       this.form.departCity = this.departData[0]?this.departData[0].value:'';
       this.form.departCode = this.departData[0]?this.departData[0].sort:''
     },
     // 失焦事件=>到达城市
-    handleDepartBlur(){
+    handleDestBlur(){
       this.form.destCity = this.destData[0]?this.destData[0].value:'';
       this.form.destCode = this.destData[0]?this.destData[0].sort:''
     },
@@ -176,6 +178,8 @@ export default {
           // 把带有value属性的对象添加到新数组中
           newForm.push(e)
         })
+        // 把转换后的数组赋值给data
+        this.destData = newForm
         // 把城市显示到下拉列表中
         callback(newForm)
       })
