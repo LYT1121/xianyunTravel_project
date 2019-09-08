@@ -5,7 +5,8 @@
       <div class="flightsContent">
         <!-- 过滤条件 -->
         <div>
-          <flightsFilters/>
+          <!-- 初始化数据，并传值 -->
+          <flightsFilters :data="cacheFlightsData" @setData="setData"/>
         </div>
 
         <!-- 航班头部布局 -->
@@ -61,9 +62,18 @@ export default {
   data() {
     return {
       // 航班总数据
-      flightsData: {},
+      flightsData: {
+        // 看后台请求的数据
+        flights: [],
+        info: {},
+        options: {}
+      },
       // 复制航班总数据=>用于筛选时组件之间传递值不受筛选第一次之后影响(再筛选其他就变空值)
-      cacheFlightsData: [],
+      cacheFlightsData: {
+        flights: [],
+        info: {},
+        options: {}
+      },
       // 航班列表数据=>用于后面循环flightsItem组件=>单独出来方便处理分页
       dataList: [],
       pageIndex: 1, // 当前页数
@@ -125,6 +135,17 @@ export default {
         }
         return e
       })
+    },
+    // 该方法传递给子组件用于修改ddataList机票列表
+    setData(arr){
+      // 修改总的航班数据
+      this.flightsData.flights = arr;
+      // 加载时重新返回分页的第一页
+      this.pageIndex = 1;
+      // 调用封装好的分页
+      this.setDataList();
+      // 修改总条数
+      this.total = arr.length;
     }
   },
   // 钩子函数=>调用上面事件处理封装好的航班总数据
