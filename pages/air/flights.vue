@@ -118,7 +118,7 @@ export default {
     // 控制行展开合并
     changeUnfoldMerge(id){
       // 获取点击的航班列表数据=>判断当前id是否是点击的，取反
-      console.log(this.dataList,id);
+      // console.log(this.dataList,id);
       this.dataList = this.dataList.map(e=>{
         if(e.id === id){
           e.handleShow = !e.handleShow
