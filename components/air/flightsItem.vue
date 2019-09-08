@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       // 控制列表的展开
-      isShow: false
+      // isShow: false
     };
   },
   // props: ["data"]
@@ -74,6 +74,12 @@ export default {
       type: Object,
       // 调用组件之间不传值，用default默认值
       default: {}
+    },
+    // 把控制列表的展开传递到父组件
+    isShow:{
+      // type 为Boolean属性类型
+      type: Boolean,
+      default:false
     }
   },
   computed: {
@@ -110,7 +116,9 @@ export default {
   methods:{
       // 控制推荐列表的展开收起
       handleShowRecommend(){
-          this.isShow = !this.isShow
+        console.log(this.data.id);
+          // this.isShow = !this.isShow
+          this.$emit('unfoldMerge',this.data.id)
       }
   }
 };

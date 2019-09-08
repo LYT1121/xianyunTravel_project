@@ -4,7 +4,9 @@
       <!-- 顶部过滤列表 -->
       <div class="flightsContent">
         <!-- 过滤条件 -->
-        <div></div>
+        <div>
+          <flightsFilters/>
+        </div>
 
         <!-- 航班头部布局 -->
         <div>
@@ -13,8 +15,9 @@
 
         <!-- 航班信息 -->
         <div>
-          <!-- :data="item"=>组件传值(父组件传值给子组件) -->
-          <flightsItem v-for="(item,index) in dataList" :key="index" :data="item" />
+          <!-- :data="item" :isShow="item.handleShow" =>组件传值(父组件传值给子组件) -->
+          <!-- @unfoldMerge="changeUnfoldMerge"=> 子传父 自定义事件-->
+          <flightsItem v-for="(item,index) in dataList" :key="index" :data="item" :isShow="item.handleShow" @unfoldMerge="changeUnfoldMerge"/>
           <!-- 分页 -->
           <el-row type="flex" justify="center" style="margin-top:10px;">
             <!-- size-change：切换条数时候触发 -->
@@ -47,11 +50,13 @@
 // 引入组件
 import flightsListHead from "@/components/air/flightsListHead.vue";
 import flightsItem from "@/components/air/flightsItem.vue";
+import flightsFilters from "@/components/air/flightsFilters.vue";
 export default {
   // 注册组件
   components: {
     flightsListHead,
-    flightsItem
+    flightsItem,
+    flightsFilters
   },
   data() {
     return {
@@ -63,17 +68,22 @@ export default {
       dataList: [],
       pageIndex: 1, // 当前页数
       pageSize: 5, // 显示条数
-      total:0
+      total: 0
     };
   },
   methods: {
     // 初始化dataList数据=>封装
-    setDataList(newtotal){
+    setDataList() {
       // 按照数学公式切换dataList的值
-      this.dataList = this.flightsData.flights.slice( 
-                (this.pageIndex - 1) * this.pageSize, 
-                this.pageIndex * this.pageSize 
-            );
+      this.dataList = this.flightsData.flights.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
+      );
+      // 分页列表数据默认合并
+      this.dataList = this.dataList.map(e=>{
+        e.handleShow = false
+        return e
+      })
     },
     // 封装获取航班总数据
     getDate() {
@@ -90,7 +100,7 @@ export default {
         // 初始化分页列表数据
         this.setDataList();
         // 总数据
-        this.total = this.flightsData.total
+        this.total = this.flightsData.total;
       });
     },
     // 切换条数时触发
@@ -104,6 +114,17 @@ export default {
     handleCurrentChange(value) {
       this.pageIndex = value;
       this.setDataList();
+    },
+    // 控制行展开合并
+    changeUnfoldMerge(id){
+      // 获取点击的航班列表数据=>判断当前id是否是点击的，取反
+      console.log(this.dataList,id);
+      this.dataList = this.dataList.map(e=>{
+        if(e.id === id){
+          e.handleShow = !e.handleShow
+        }
+        return e
+      })
     }
   },
   // 钩子函数=>调用上面事件处理封装好的航班总数据
