@@ -125,7 +125,8 @@ export default {
                 this.$store.commit("user/setUserInfo", result.data)
                 // 跳转到首页
                 setTimeout(() => {
-                      this.$router.push("/")
+                    // replace 页面跳转会销毁上一个页面，点击返回会返回上上个页面
+                      this.$router.replace("/")
                 }, 1000);
               })
             }
