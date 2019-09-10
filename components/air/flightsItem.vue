@@ -126,7 +126,7 @@ export default {
           path:'/air/order',
           query:{
             id,
-            stat_xid:seatId
+            seat_xid:seatId
           }
         })
       }

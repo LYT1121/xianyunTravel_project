@@ -9,7 +9,7 @@
 
             <!-- 侧边栏 -->
             <div class="aside">
-                 <orderAside/>         
+                 <orderAside :data="infoData"/>         
             </div>
         </el-row>
     </div>
@@ -26,7 +26,8 @@ export default {
             // 机票的数据
             infoData:{
                 // 保险id的集合=>数组=>初始化
-                insurances:[]
+                insurances:[],
+                seat_infos: {}
             }
         }
     },
@@ -41,7 +42,7 @@ export default {
         }).then(res=>{
             // 保存机票的数据
             this.infoData = res.data
-            // console.log(this.infoData);
+            console.log(this.infoData,111);
         })
     },
     // 注册组件

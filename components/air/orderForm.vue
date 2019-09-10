@@ -93,7 +93,7 @@ export default {
       contactPhone: "", // 联系电话
       captcha: "", // 验证码
       invoice: false, // 发票字段，默认false
-      stat_xid: "", // 座位id，来自于url的参数
+      seat_xid: "", // 座位id，来自于url的参数
       air: "" // 航班的id,来自于url的id
     };
   },
@@ -166,10 +166,10 @@ export default {
         contactPhone: this.contactPhone,
         invoice: this.invoice,
         captcha: this.captcha,
-        seat_xid: this.$route.query.stat_xid,// 直接通过路由拿数据
-        air: this.data.id
+        seat_xid: this.$route.query.seat_xid,// 直接通过路由拿数据
+        air: this.$route.query.id
       };
-      console.log(data);
+      // console.log(data);
       // 判断
       // 判断乘机人
       if (!this.users[0].username || !this.users[0].id) {
