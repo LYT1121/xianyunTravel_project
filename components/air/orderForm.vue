@@ -33,8 +33,12 @@
       <h2>保险</h2>
       <div>
         <div class="insurance-item" v-for="(item,index) in data.insurances" :key="index">
-            <!-- 添加多选框change 事件 -->
-          <el-checkbox :label="`${item.type}：￥${item.price}/份×${users.length}  最高赔付${item.compensation}`" border @change="changeInsurances(item.id)"></el-checkbox>
+          <!-- 添加多选框change 事件 -->
+          <el-checkbox
+            :label="`${item.type}：￥${item.price}/份×${users.length}  最高赔付${item.compensation}`"
+            border
+            @change="changeInsurances(item.id)"
+          ></el-checkbox>
         </div>
       </div>
     </div>
@@ -67,12 +71,12 @@
 <script>
 export default {
   // 接收父组件传过来的数据
-  props:{
-       // 接收机票信息
-       data:{
-           type:Object,
-           default:{}
-       }   
+  props: {
+    // 接收机票信息
+    data: {
+      type: Object,
+      default: {}
+    }
   },
   data() {
     return {
@@ -84,43 +88,73 @@ export default {
         }
       ],
       // 是否购买保险 => 需要id，是一个数组(集合id)=>父组件中已获取
-      insurances:[],
-      contactName: "",    // 联系人
-      contactPhone: "",   // 联系电话
-      captcha: "",        // 验证码
-      invoice: false,     // 发票字段，默认false
-      seat_xid: "",       // 座位id，来自于url的参数
-      air: "" ,           // 航班的id,来自于url的id  
+      insurances: [],
+      contactName: "", // 联系人
+      contactPhone: "", // 联系电话
+      captcha: "", // 验证码
+      invoice: false, // 发票字段，默认false
+      seat_xid: "", // 座位id，来自于url的参数
+      air: "" // 航班的id,来自于url的id
     };
   },
   methods: {
     // 添加乘机人
     handleAddUsers() {
-        // 添加多一个列表
-        this.users.push({
-            username: "",
-            id: ""
-        })
+      // 添加多一个列表
+      this.users.push({
+        username: "",
+        id: ""
+      });
     },
 
     // 移除乘机人
     handleDeleteUser(index) {
-        // 把users里的某一项移除 => 数组的方法splice(从第几个开始删除,删除几个[,插入项(多个用数组写)])
-        this.users.splice(index,1)
+      // 把users里的某一项移除 => 数组的方法splice(从第几个开始删除,删除几个[,插入项(多个用数组写)])
+      this.users.splice(index, 1);
     },
     // 保险选中事件
-    changeInsurances(id){
-        // 先判断数组中是否已经包含该id => 存在则删除
-        if(this.insurances.indexOf(id) > -1){
-            this.insurances.splice(this.insurances.indexOf(id),1)
-        }else{
-            // 不存在则添加
-            this.insurances.push(id)
-        }
+    changeInsurances(id) {
+      // 先判断数组中是否已经包含该id => 存在则删除
+      if (this.insurances.indexOf(id) > -1) {
+        this.insurances.splice(this.insurances.indexOf(id), 1);
+      } else {
+        // 不存在则添加
+        this.insurances.push(id);
+      }
     },
 
     // 发送手机验证码
-    handleSendCaptcha() {},
+    handleSendCaptcha() {
+      if (!this.contactPhone) {
+        this.$confirm("手机号码不能为空", "提示", {
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          type: "warning"
+        });
+        return;
+      }
+
+      if (this.contactPhone.length !== 11) {
+        this.$confirm("手机号码格式错误", "提示", {
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          type: "warning"
+        });
+        return;
+      }
+      // 发送验证码=>跟注册页面的验证码一样
+      this.$axios({
+        url: "/captchas",
+        method: "POST",
+        data: {
+          tel: this.contactPhone // 手机号码
+        }
+      }).then(res => {
+        // 结构出code属性
+        const { code } = res.data;
+        this.$alert(`模拟手机验证码是：${code}`, "提示");
+      });
+    },
 
     // 提交订单
     handleSubmit() {}
