@@ -84,6 +84,12 @@ export default {
       total: 0
     };
   },
+  // 监听器：监听路由的变化
+  watch: {
+      $route(){
+        this.getDate()
+      }
+  },
   methods: {
     // 初始化dataList数据=>封装
     setDataList() {
@@ -97,12 +103,6 @@ export default {
         e.handleShow = false
         return e
       })
-    },
-    // 监听器：监听路由的变化
-    watch: {
-      $route(){
-        this.getDate()
-      }
     },
     // 封装获取航班总数据
     getDate() {
