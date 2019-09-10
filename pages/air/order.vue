@@ -42,7 +42,7 @@ export default {
         }).then(res=>{
             // 保存机票的数据
             this.infoData = res.data
-            console.log(this.infoData,111);
+            // console.log(this.infoData,111);
         })
     },
     // 注册组件

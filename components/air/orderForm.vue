@@ -66,6 +66,8 @@
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
       </div>
     </div>
+    <!-- 模板中引用总价格触发计算 -->
+    <span v-show="false">{{allPrice}}</span>
   </div>
 </template>
 <script>
@@ -97,6 +99,27 @@ export default {
       air: "" // 航班的id,来自于url的id
     };
   },
+  // 计算属性
+  computed: {
+        // 总价格
+        allPrice(){
+            // 如果请求未完成，暂时不需要计算，返回0；
+            if(!this.data.seat_infos){
+                return 0;
+            }
+            let price = 0;
+            // 机票单价，取座位信息的第一个价格
+            price += this.data.seat_infos.org_settle_price;
+            // 燃油费
+            price += this.data.airport_tax_audlet;
+            // 保险数据
+            price += 30 * this.insurances.length;
+            price *= this.users.length;
+            // 把值存到store
+            this.$store.commit("air/setAllPirce", price)
+            return price;
+        }
+    },
   methods: {
     // 添加乘机人
     handleAddUsers() {
