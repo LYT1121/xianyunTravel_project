@@ -215,6 +215,12 @@ export default {
         this.$alert('日期不能为空哦！','提示')
         return
       }
+      // 添加本地存储=>机票列表页需要展示搜索记录
+      const airs = JSON.parse(localStorage.getItem('airs') || `[]`);// 获取本地存储，转换为数组
+      // 把数组添加到总的数据form中
+      airs.push(this.form);
+      // 把新的数组存到本地=>转换字符串
+      localStorage.setItem("airs", JSON.stringify(airs));
       // 跳转到机票列表页 /air/flights
       this.$router.push({
         path: "/air/flights",

@@ -42,6 +42,7 @@
       <!-- 侧边栏 -->
       <div class="aside">
         <!-- 侧边栏组件 -->
+        <FlightsAside/>
       </div>
     </el-row>
   </div>
@@ -52,12 +53,14 @@
 import flightsListHead from "@/components/air/flightsListHead.vue";
 import flightsItem from "@/components/air/flightsItem.vue";
 import flightsFilters from "@/components/air/flightsFilters.vue";
+import FlightsAside from "@/components/air/FlightsAside.vue";
 export default {
   // 注册组件
   components: {
     flightsListHead,
     flightsItem,
-    flightsFilters
+    flightsFilters,
+    FlightsAside
   },
   data() {
     return {
@@ -94,6 +97,12 @@ export default {
         e.handleShow = false
         return e
       })
+    },
+    // 监听器：监听路由的变化
+    watch: {
+      $route(){
+        this.getDate()
+      }
     },
     // 封装获取航班总数据
     getDate() {
