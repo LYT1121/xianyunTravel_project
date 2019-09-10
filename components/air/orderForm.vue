@@ -33,7 +33,8 @@
       <h2>保险</h2>
       <div>
         <div class="insurance-item" v-for="(item,index) in data.insurances" :key="index">
-          <el-checkbox :label="`${item.type}：￥${item.price}/份×${users.length}  最高赔付${item.compensation}`" border></el-checkbox>
+            <!-- 添加多选框change 事件 -->
+          <el-checkbox :label="`${item.type}：￥${item.price}/份×${users.length}  最高赔付${item.compensation}`" border @change="changeInsurances(item.id)"></el-checkbox>
         </div>
       </div>
     </div>
@@ -43,11 +44,11 @@
       <div class="contact">
         <el-form label-width="60px">
           <el-form-item label="姓名">
-            <el-input></el-input>
+            <el-input v-model="contactName"></el-input>
           </el-form-item>
 
           <el-form-item label="手机">
-            <el-input placeholder="请输入内容">
+            <el-input placeholder="请输入内容" v-model="contactPhone">
               <template slot="append">
                 <el-button @click="handleSendCaptcha">发送验证码</el-button>
               </template>
@@ -55,7 +56,7 @@
           </el-form-item>
 
           <el-form-item label="验证码">
-            <el-input></el-input>
+            <el-input v-model="captcha"></el-input>
           </el-form-item>
         </el-form>
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
@@ -83,7 +84,13 @@ export default {
         }
       ],
       // 是否购买保险 => 需要id，是一个数组(集合id)=>父组件中已获取
-      // insurances:[]
+      insurances:[],
+      contactName: "",    // 联系人
+      contactPhone: "",   // 联系电话
+      captcha: "",        // 验证码
+      invoice: false,     // 发票字段，默认false
+      seat_xid: "",       // 座位id，来自于url的参数
+      air: "" ,           // 航班的id,来自于url的id  
     };
   },
   methods: {
@@ -100,6 +107,16 @@ export default {
     handleDeleteUser(index) {
         // 把users里的某一项移除 => 数组的方法splice(从第几个开始删除,删除几个[,插入项(多个用数组写)])
         this.users.splice(index,1)
+    },
+    // 保险选中事件
+    changeInsurances(id){
+        // 先判断数组中是否已经包含该id => 存在则删除
+        if(this.insurances.indexOf(id) > -1){
+            this.insurances.splice(this.insurances.indexOf(id),1)
+        }else{
+            // 不存在则添加
+            this.insurances.push(id)
+        }
     },
 
     // 发送手机验证码
