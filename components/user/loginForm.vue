@@ -69,7 +69,8 @@ export default {
               });
               // 跳转到首页
               setTimeout(() => {
-                        this.$router.replace("/")
+                        // this.$router.replace("/")
+                        this.$router.back("")
                     }, 1000);
             })
             .catch(err => {

@@ -93,7 +93,7 @@ export default {
       contactPhone: "", // 联系电话
       captcha: "", // 验证码
       invoice: false, // 发票字段，默认false
-      seat_xid: "", // 座位id，来自于url的参数
+      stat_xid: "", // 座位id，来自于url的参数
       air: "" // 航班的id,来自于url的id
     };
   },
@@ -157,7 +157,76 @@ export default {
     },
 
     // 提交订单
-    handleSubmit() {}
+    handleSubmit() {
+      // 把后台接口需要的字段发送回去
+      const data = {
+        users: this.users,
+        insurances: this.insurances,
+        contactName: this.contactName,
+        contactPhone: this.contactPhone,
+        invoice: this.invoice,
+        captcha: this.captcha,
+        seat_xid: this.$route.query.stat_xid,// 直接通过路由拿数据
+        air: this.data.id
+      };
+      console.log(data);
+      // 判断
+      // 判断乘机人
+      if (!this.users[0].username || !this.users[0].id) {
+        this.$message.error("乘机人不能为空");
+        return;
+      }
+
+      // 联系人
+      if (!this.contactName) {
+        this.$message.error("联系人不能为空");
+        return;
+      }
+
+      // 联系电话
+      if (!this.contactPhone) {
+        this.$message.error("联系电话不能为空");
+        return;
+      }
+
+      // 联系电话
+      if (!this.captcha) {
+        this.$message.error("验证码不能为空");
+        return;
+      }
+      // console.log(this.$store.state.user.userInfo.token);
+      // 提交订单
+      this.$axios({
+        url: "/airorders",
+        method: "POST",
+        data,
+        // 要给接口单独加上请求头=>判断其有没有登录过才允许提交
+        headers: {
+          Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
+        }
+      })
+        .then(res => {
+          // 提示用户
+          /* this.$message({
+            message: "正在生成订单！请稍等",
+            type: "success"
+          }); */
+          // 跳转到付款页
+          this.$router.push({
+            path: "/air/pay",
+            query: { id: res.data.data.id }
+          });
+        })
+        /* .catch(err => {
+          const { message } = err.response.data;
+          // 警告提示
+          this.$confirm(message, "提示", {
+            confirmButtonText: "确定",
+            showCancelButton: false,
+            type: "warning"
+          });
+        }); */
+    }
   }
 };
 </script>
