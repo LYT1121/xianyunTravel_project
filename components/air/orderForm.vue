@@ -230,15 +230,17 @@ export default {
       })
         .then(res => {
           // 提示用户
-          /* this.$message({
+          this.$message({
             message: "正在生成订单！请稍等",
             type: "success"
-          }); */
+          });
           // 跳转到付款页
-          this.$router.push({
+          setTimeout(()=>{
+            this.$router.push({
             path: "/air/pay",
             query: { id: res.data.data.id }
           });
+          },10)
         })
         /* .catch(err => {
           const { message } = err.response.data;
