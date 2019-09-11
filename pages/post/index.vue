@@ -24,7 +24,7 @@
     </el-row>
     <!-- 右边 -->
     <el-row type="flex" class="rightContent" :span="16">
-        
+    <!-- https://github.com/hsian/vue-word-editor 富文本框使用 -->
     </el-row>
   </div>
 </template>
